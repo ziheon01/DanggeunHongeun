@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import ProductCard from "../components/ProductCard";
@@ -23,6 +23,7 @@ function ProductDetail() {
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
+      {/* 이미지 */}
       <div style={{ textAlign: "center", marginBottom: "20px" }}>
         <img
           src={product.imageUrl || "https://via.placeholder.com/400x300?text=상품이미지"}
@@ -31,6 +32,7 @@ function ProductDetail() {
         />
       </div>
 
+      {/* 제목 + 찜 버튼 */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ fontSize: "24px" }}>{product.title}</h1>
         <button
@@ -47,6 +49,7 @@ function ProductDetail() {
         </button>
       </div>
 
+      {/* 가격, 지역, 날짜 */}
       <p style={{ fontSize: "18px", fontWeight: "bold" }}>
         {product.price.toLocaleString()}원
       </p>
@@ -56,24 +59,19 @@ function ProductDetail() {
 
       <hr style={{ margin: "30px 0" }} />
 
+      {/* 설명 */}
       <h3>상품 설명</h3>
       <p>{product.description}</p>
 
       <hr style={{ margin: "30px 0" }} />
 
-      <h3>
-        판매자:{" "}
-        <Link
-          to={`/seller/${product.sellerName}`}
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
-          {product.sellerName}
-        </Link>
-      </h3>
+      {/* 판매자 정보 */}
+      <h3>판매자: {product.sellerName || "홍길동"}</h3>
       <p>찜 {product.likes || 0}개 • 등록상품 3개</p>
 
       <hr style={{ margin: "30px 0" }} />
 
+      {/* 다른 상품 */}
       <h3>👀 다른 상품도 둘러보세요</h3>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
         {otherProducts.map(p => (

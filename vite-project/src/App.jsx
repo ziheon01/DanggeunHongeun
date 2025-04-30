@@ -1,28 +1,41 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProductProvider } from "./contexts/ProductContext";
+import { UserProvider } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home"; // 홈 페이지 파일도 만들었어야 함
+import Sidebar from "./components/Sidebar";
+import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import ProductDetail from "./pages/ProductDetail";
 import ProductUpload from "./pages/ProductUpload";
 import Favorites from "./pages/Favorites";
+import SellerPage from "./pages/SellerPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
-    <ProductProvider>
-      <BrowserRouter>
-        <div style={{ fontFamily: "Arial, sans-serif", maxWidth: "800px", margin: "0 auto", padding: "20px" }}>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/upload" element={<ProductUpload />} />
-            <Route path="/favorites" element={<Favorites />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </ProductProvider>
+    <UserProvider>
+      <ProductProvider>
+        <BrowserRouter>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ width: "100%", maxWidth: "1000px", padding: "20px" }}>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/upload" element={<ProductUpload />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/seller/:name" element={<SellerPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Routes>
+            </div>
+            <Sidebar />
+          </div>
+        </BrowserRouter>
+      </ProductProvider>
+    </UserProvider>
   );
 }
 
