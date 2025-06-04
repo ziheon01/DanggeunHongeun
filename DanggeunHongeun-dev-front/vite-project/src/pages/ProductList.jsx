@@ -3,19 +3,18 @@ import { ProductContext } from "../contexts/ProductContext";
 import { UserContext } from "../contexts/UserContext";
 import axios from "axios";
 
-
 function ProductList() {
   const { products, favorites, setFavorites } = useContext(ProductContext);
   const { user } = useContext(UserContext);
-  
+
   const handleLikeToggle = async (productId) => {
     if (!user) {
       alert("로그인이 필요합니다.");
       return;
     }
-  
+
     const isLiked = favorites.some(fav => fav.id === productId);
-  
+
     try {
       if (isLiked) {
         await axios.delete(`http://localhost:3000/api/favorites`, {
@@ -32,19 +31,16 @@ function ProductList() {
     } catch (err) {
       console.error("찜 요청 실패:", err);
       alert("찜 요청 실패!");
-      return;  // ✅ 여기서 함수 종료 (실패 시 refresh X)
+      return;
     }
-  
-    // ✅ refresh 요청은 별도 처리
+
     try {
       const refresh = await axios.get(`http://localhost:3000/api/favorites?user_id=${user.id}`);
       setFavorites(refresh.data);
     } catch (err) {
       console.error("찜 목록 갱신 실패:", err);
-      // ✅ 이건 alert 안띄움 (콘솔만)
     }
   };
-  
 
   return (
     <div style={productListStyle}>
@@ -70,10 +66,59 @@ function ProductList() {
   );
 }
 
-const productListStyle = { padding: '20px' };
-const productContainerStyle = { display: 'flex', gap: '20px', flexWrap: 'wrap' };
-const productCardStyle = { border: '1px solid #ddd', borderRadius: '10px', padding: '20px', width: '300px', textAlign: 'center' };
-const productImageStyle = { width: '100%', height: 'auto', borderRadius: '8px' };
-const buttonStyle = { padding: "10px", backgroundColor: "green", color: "white", border: "none", borderRadius: "4px", fontSize: "16px", cursor: "pointer" };
+// 스타일 객체
+const productListStyle = {
+  padding: "20px",
+};
+
+const productContainerStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "20px",
+  justifyContent: "center",  // 화면에 맞게 정렬
+  padding: "0 20px",
+  boxSizing: "border-box",
+};
+
+const productCardStyle = {
+  border: "1px solid #ddd",
+  borderRadius: "10px",
+  padding: "20px",
+  textAlign: "center",
+  width: "calc(33% - 20px)", // 기본적으로 3개씩 보이게
+  boxSizing: "border-box",
+  minWidth: "250px", // 최소 너비
+};
+
+const productImageStyle = {
+  width: "100%",
+  height: "auto",
+  borderRadius: "8px",
+};
+
+const buttonStyle = {
+  padding: "10px 20px",
+  backgroundColor: "green",
+  color: "white",
+  border: "none",
+  borderRadius: "4px",
+  fontSize: "16px",
+  cursor: "pointer",
+};
+
+// 반응형 스타일 (미디어 쿼리 추가)
+const mediaStyles = `
+  @media (max-width: 768px) {
+    .product-card {
+      width: 48%;  // 화면 크기가 작으면 한 줄에 2개씩
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-card {
+      width: 100%;  // 화면이 더 작으면 한 줄에 1개씩
+    }
+  }
+`;
 
 export default ProductList;
